@@ -77,7 +77,7 @@ hiveRunTestAll() {
 
 	if [ "$1" == "perf" ]
 	then
-		mvnTest="TestPerfCliDriver"
+		mvnTest="TestTezPerfCliDriver"
 	fi
 
 	if [ "$1" == "tez" ]
@@ -88,6 +88,17 @@ hiveRunTestAll() {
 	egrep "$mvnTest" "$2" | perl -pe 's@.*testCliDriver_@@g' | awk '{print $1 ".q"}' | xargs -n 10 | perl -pe 's@ @,@g' | xargs -I{} mvn test -Dtest="$mvnTest" -Dtest.output.overwrite=true -Dqfile={}
 }
 
+
+hiveOverrideAll() {
+	hiveOverrideTestPerfAll $1
+	hiveOverrideTestCliAll $1
+	hiveOverrideTestLlapLocalAll $1
+	hiveOverrideTestLlapAll $1
+	hiveOverrideTestTezAll $1
+	cd ..
+	hiveOverrideTestSparkAll $1
+}
+
 hiveOverrideTestTezAll() {
 	egrep 'TestMiniTezCliDriver' $1 | perl -pe 's@.*testCliDriver_@@g' | awk '{print $1 ".q"}' | xargs -n 10 | perl -pe 's@ @,@g' | xargs -I{} mvn test -Dtest=TestMiniTezCliDriver -Dtest.output.overwrite=true -Dqfile={}
 }
@@ -95,17 +106,31 @@ hiveOverrideTestLlapAll() {
 	egrep 'TestMiniLlapCliDriver' $1 | perl -pe 's@.*testCliDriver_@@g' | awk '{print $1 ".q"}' | xargs -n 10 | perl -pe 's@ @,@g' | xargs -I{} mvn test -Dtest=TestMiniLlapCliDriver -Dtest.output.overwrite=true -Dqfile={}
 }
 hiveOverrideTestCliAll() {
-	egrep 'TestCliDriver' $1 | perl -pe 's@.*testCliDriver_@@g' | awk '{print $1 ".q"}' | xargs -n 10 | perl -pe 's@ @,@g' | xargs -I{} mvn test -Dtest=TestCliDriver -Dtest.output.overwrite=true -Dqfile={}
+	if [ "$2" == "" ]
+	then
+		numFiles=10
+	else
+		numFiles="$2"
+	fi
+	echo "numFiles:$numFiles"
+	egrep 'TestCliDriver' $1 | perl -pe 's@.*testCliDriver_@@g' | awk '{print $1 ".q"}' | xargs -n $numFiles | perl -pe 's@ @,@g' | xargs -I{} mvn test -Dtest=TestCliDriver -Dtest.output.overwrite=true -Dqfile={}
 }
 hiveOverrideTestSparkAll() {
 	egrep 'TestSparkCliDriver' $1 | perl -pe 's@.*testCliDriver_@@g' | awk '{print $1 ".q"}' | xargs -n 10 | perl -pe 's@ @,@g' | xargs -I{} mvn test -Dtest=TestSparkCliDriver -Dtest.output.overwrite=true -Dqfile={}
 }
 hiveOverrideTestLlapLocalAll() {
-	egrep 'TestMiniLlapLocalCliDriver' $1 | perl -pe 's@.*testCliDriver_@@g' | awk '{print $1 ".q"}' | xargs -n 7 | perl -pe 's@ @,@g' | xargs -I{} mvn test -Dtest=TestMiniLlapLocalCliDriver -Dtest.output.overwrite=true -Dqfile={}
+	if [ "$2" == "" ]
+	then
+		numFiles=10
+	else
+		numFiles="$2"
+	fi
+	echo "numFiles:$numFiles"
+	egrep 'TestMiniLlapLocalCliDriver' $1 | perl -pe 's@.*testCliDriver_@@g' | awk '{print $1 ".q"}' | xargs -n $numFiles | perl -pe 's@ @,@g' | xargs -I{} mvn test -Dtest=TestMiniLlapLocalCliDriver -Dtest.output.overwrite=true -Dqfile={}
 }
 
 hiveOverrideTestPerfAll() {
-	egrep 'TestPerfCliDriver' $1 | perl -pe 's@.*testCliDriver_@@g' | awk '{print $1 ".q"}' | xargs -n 9 | perl -pe 's@ @,@g' | xargs -I{} mvn test -Dtest=TestPerfCliDriver -Dtest.output.overwrite=true -Dqfile={}
+	egrep 'TestTezPerfCliDriver' $1 | perl -pe 's@.*testCliDriver_@@g' | awk '{print $1 ".q"}' | xargs -n 9 | perl -pe 's@ @,@g' | xargs -I{} mvn test -Dtest=TestTezPerfCliDriver -Dtest.output.overwrite=true -Dqfile={}
 }
 
 hiveRunLipwig() {
@@ -147,7 +172,7 @@ hiveRunTest() {
 	
 	if [ "$1" == "perf" ]
 	then
-		mvnTest="mvn test -Dtest=TestPerfCliDriver" 
+		mvnTest="mvn test -Dtest=TestTezPerfCliDriver" 
 	fi
 	
 	if [ "$1" == "llap" ]

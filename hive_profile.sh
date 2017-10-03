@@ -1,0 +1,6 @@
+alias hiveMakePackageCl='mvn clean package -DskipTests -Pdist'
+alias hiveMakePackage='mvn package -DskipTests -Pdist'
+alias hiveMakeCl='mvn clean install -DskipTests'
+alias hiveMake='mvn install -DskipTests'
+alias sshPG='ssh -i ~/Downloads/openstack-keypair.pem.txt root@172.27.52.141'
+alias sshHIVE='ssh -i ~/Downloads/openstack-keypair.pem.txt root@172.27.30.12'
