@@ -12,11 +12,14 @@ set runtimepath^=~/.vim/bundle/ctrlp.vim
 export MAVEN_OPTS="-Xmx2048m -enableassertions"
 export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
 
-export HADOOP_HOME=/Users/vgarg/workspace/hadoop-2.8.1
+# export HADOOP_HOME=/Users/vgarg/workspace/hadoop-2.8.1
+export HADOOP_HOME=/Users/vgarg/workspace/hadoop-3.0.0-beta1
 
 export HADOOP_CLIENT_OPTS="-Xmx4096m -XX:MaxPermSize=2048m $HADOOP_CLIENT_OPTS"
-export TEZ_JARS=/Users/vgarg/workspace/tez/apache-tez-0.8.4-bin
-export TEZ_CONF_DIR=/Users/vgarg/workspace/tez/apache-tez-0.8.4-bin/conf
+#export TEZ_JARS=/Users/vgarg/workspace/tez/apache-tez-0.8.4-bin
+export TEZ_JARS=/Users/vgarg/workspace/tez/apache-tez-0.9.0-bin
+export TEZ_CONF_DIR=/Users/vgarg/workspace/tez/apache-tez-0.9.0-bin/conf
+#export TEZ_CONF_DIR=/Users/vgarg/workspace/tez/apache-tez-0.8.4-bin/conf
 export HADOOP_CLASSPATH=${TEZ_CONF_DIR}:${TEZ_JARS}/*:${TEZ_JARS}/lib/*
 
 export HIVE_OPTS="--hiveconf hive.fetch.task.conversion=minimal"
@@ -24,7 +27,7 @@ export HIVE_OPTS="--hiveconf hive.fetch.task.conversion=minimal"
 export HIVE_OPTS="$HIVE_OPTS --hiveconf hive.auto.convert.join.noconditionaltask.size=10000000"
 export HIVE_OPTS="$HIVE_OPTS --hiveconf hive.security.authorization.enabled=true"
 
-export HIVE_OPTS="$HIVE_OPTS --hiveconf hive.log.dir=/Users/vgarg/hive_temp/vgarg --hiveconf hive.log.file=hive.debug2.log --hiveconf hive.root.logger=DEBUG,DRFA --hiveconf tez.staging-dir=/Users/vgarg/hive_temp/vgarg/hive --hiveconf tez.ignore.lib.uris=true --hiveconf tez.runtime.optimize.local.fetch=true --hiveconf tez.local.mode=true --hiveconf hive.tez.container.size=4096 --hiveconf hive.auto.convert.join.noconditionaltask.size=1370 --hiveconf hive.metastore.warehouse.dir=/Users/vgarg/hive_temp/vgarg/hive/warehouse --hiveconf hive.execution.engine=tez --hiveconf hive.user.install.directory=file:///Users/vgarg/hive_temp/vgarg/hive --hiveconf fs.default.name=file:/// --hiveconf fs.defaultFS=file:/// --hiveconf tez.staging-dir=/Users/vgarg/hive_temp/vgarg/hive --hiveconf tez.ignore.lib.uris=true --hiveconf tez.runtime.optimize.local.fetch=true --hiveconf hive.explain.user=false --hiveconf hive.mapred.mode=nonstrict --hiveconf datanucleus.schema.autoCreateTables=true --hiveconf javax.jdo.option.ConnectionURL=jdbc:derby:;databaseName=/Users/vgarg/hive_temp/metastore_db;create=true " 
+export HIVE_OPTS="$HIVE_OPTS --hiveconf tez.ignore.lib.uris=true --hiveconf tez.runtime.optimize.local.fetch=true --hiveconf tez.local.mode=true --hiveconf hive.tez.container.size=4096 --hiveconf hive.auto.convert.join.noconditionaltask.size=1370 --hiveconf hive.metastore.warehouse.dir=/Users/vgarg/hive_temp/vgarg/hive/warehouse --hiveconf hive.execution.engine=tez --hiveconf hive.user.install.directory=file:///Users/vgarg/hive_temp/vgarg/hive --hiveconf fs.default.name=file:/// --hiveconf fs.defaultFS=file:/// --hiveconf tez.staging-dir=/Users/vgarg/hive_temp/vgarg/hive --hiveconf tez.ignore.lib.uris=true --hiveconf tez.runtime.optimize.local.fetch=true --hiveconf hive.explain.user=false --hiveconf hive.mapred.mode=nonstrict --hiveconf datanucleus.schema.autoCreateTables=true --hiveconf javax.jdo.option.ConnectionURL=jdbc:derby:;databaseName=/Users/vgarg/hive_temp/metastore_db;create=true --hiveconf hive.log.dir=/Users/vgarg/hive_temp/vgarg --hiveconf hive.log.file=hive.debug2.log "
 
 
 # bypass CBO falling back to AST
@@ -124,7 +127,14 @@ hiveOverrideTestCliAll() {
 	egrep 'TestCliDriver' $1 | perl -pe 's@.*testCliDriver_@@g' | awk '{print $1 ".q"}' | xargs -n $numFiles | perl -pe 's@ @,@g' | xargs -I{} mvn test -Dtest=TestCliDriver -Dtest.output.overwrite=true -Dqfile={}
 }
 hiveOverrideTestSparkAll() {
-	egrep 'TestSparkCliDriver' $1 | perl -pe 's@.*testCliDriver_@@g' | awk '{print $1 ".q"}' | xargs -n 10 | perl -pe 's@ @,@g' | xargs -I{} mvn test -Dtest=TestSparkCliDriver -Dtest.output.overwrite=true -Dqfile={}
+	if [ "$2" == "" ]
+	then
+		numFiles=10
+	else
+		numFiles="$2"
+	fi
+	echo "numFiles:$numFiles"
+	egrep 'TestSparkCliDriver' $1 | perl -pe 's@.*testCliDriver_@@g' | awk '{print $1 ".q"}' | xargs -n $numFiles | perl -pe 's@ @,@g' | xargs -I{} mvn test -Dtest=TestSparkCliDriver -Dtest.output.overwrite=true -Dqfile={}
 }
 hiveOverrideTestLlapLocalAll() {
 	if [ "$2" == "" ]
