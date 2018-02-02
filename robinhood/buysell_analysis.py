@@ -91,10 +91,10 @@ def mainDriver(sysargs):
     if(os.path.isfile(fileName)):
         with open(fileName) as inputFile:
             for row in reversed(list(csv.reader(inputFile))):
-                symbol=row[21]
+                symbol=row[22]
                 state=row[19]
                 timestamp=row[23]
-                #log('Symbol: ' + symbol + ' with state ' + state)
+                log('Symbol: ' + symbol + ' with state ' + state)
                 if(state == 'filled'):
                     price = float(row[1])
                     quantity = float(row[4])
