@@ -12,7 +12,7 @@ hiveBuildAndMovePackage() {
 	branchName=$(git branch | grep ^* | awk '{print $2}')
 	srcPath=~/workspace/hive_jars/$branchName
 	mkdir -p $srcPath
-	org.infernus.idea.checkstyle.exception.CheckStylePluginException: <html><b>The Checkstyle rules file could not be parsed.</b><br>SuppressWithNearbyCommentFilter is not allowed as a child in Checker<br>The file has been blacklisted for 60s.</html>cp -rf packaging $srcPath/
+	cp -rf packaging $srcPath/
 }
 
 hiveStartHiveCli() {
