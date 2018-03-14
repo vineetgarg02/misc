@@ -17,8 +17,8 @@ export HADOOP_HOME=/Users/vgarg/workspace/hadoop-3.0.0-beta1
 
 export HADOOP_CLIENT_OPTS="-Xmx4096m -XX:MaxPermSize=2048m $HADOOP_CLIENT_OPTS"
 #export TEZ_JARS=/Users/vgarg/workspace/tez/apache-tez-0.8.4-bin
-export TEZ_JARS=/Users/vgarg/workspace/tez/apache-tez-0.9.0-bin
-export TEZ_CONF_DIR=/Users/vgarg/workspace/tez/apache-tez-0.9.0-bin/conf
+export TEZ_JARS=/Users/vgarg/workspace/tez/apache-tez-0.9.1-bin
+export TEZ_CONF_DIR=/Users/vgarg/workspace/tez/apache-tez-0.9.1-bin/conf
 #export TEZ_CONF_DIR=/Users/vgarg/workspace/tez/apache-tez-0.8.4-bin/conf
 export HADOOP_CLASSPATH=${TEZ_CONF_DIR}:${TEZ_JARS}/*:${TEZ_JARS}/lib/*
 

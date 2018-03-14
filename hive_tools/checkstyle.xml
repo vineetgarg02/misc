@@ -65,7 +65,7 @@
   <module name="Translation"/>
 
   <module name="Header">
-    <property name="headerFile" value="${config_loc}/asf.header"/>
+    <property name="headerFile" value="/Users/vgarg/repos/hive.vineet.master/checkstyle/asf.header"/>
   </module>
 
   <!-- Maximum file line length -->
@@ -81,7 +81,7 @@
 
   <!-- List of files to ignore -->
   <module name="SuppressionFilter">
-    <property name="file" value="${config_loc}/suppressions.xml"/>
+    <property name="file" value="/Users/vgarg/repos/hive.vineet.master/checkstyle/suppressions.xml"/>
   </module>
 
 

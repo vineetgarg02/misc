@@ -7,7 +7,12 @@ alias sshHIVE='ssh -i ~/Downloads/openstack-keypair.pem.txt root@172.27.30.12'
 
 
 hiveBuildAndMovePackage() {
-	hiveMakePackageCl
+	if [ "$1" == "clean" ]
+	then
+		hiveMakePackageCl
+	else
+		hiveMakePackage
+	fi
 
 	branchName=$(git branch | grep ^* | awk '{print $2}')
 	srcPath=~/workspace/hive_jars/$branchName
@@ -25,4 +30,17 @@ hiveStartHiveCli() {
 	fi
 }
 
-alias makeCleanHiveP='hiveBuildAndMovePackage'
+hiveOverrideTestsAll() {
+	if [ "$2" == "" ]
+	then
+		numFiles=10
+	else
+		numFiles="$2"
+	fi
+	echo "numFiles:$numFiles"
+	echo "cli driver: $3"
+	egrep "$3" $1 | perl -pe 's@.*testCliDriver_@@g' | awk '{print $1 ".q"}' | xargs -n $numFiles | perl -pe 's@ @,@g' | xargs -I{} mvn test -Dtest=$3 -Dtest.output.overwrite=true -Dqfile={}
+}
+
+alias makeCleanP='hiveBuildAndMovePackage clean'
+alias makeP='hiveBuildAndMovePackage'
