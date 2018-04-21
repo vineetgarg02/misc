@@ -24,9 +24,9 @@ hiveStartHiveCli() {
 	branchName=$(git branch | grep ^* | awk '{print $2}')
 	if [ "$1" == "debug" ]
 	then
-		~/workspace/hive_jars/$branchName/packaging/target/apache-hive-3.0.0-SNAPSHOT-bin/apache-hive-3.0.0-SNAPSHOT-bin/bin/hive --debug
+		~/workspace/hive_jars/$branchName/packaging/target/apache-hive-3.1.0-SNAPSHOT-bin/apache-hive-3.1.0-SNAPSHOT-bin/bin/hive --debug
 	else
-		~/workspace/hive_jars/$branchName/packaging/target/apache-hive-3.0.0-SNAPSHOT-bin/apache-hive-3.0.0-SNAPSHOT-bin/bin/hive
+		~/workspace/hive_jars/$branchName/packaging/target/apache-hive-3.1.0-SNAPSHOT-bin/apache-hive-3.1.0-SNAPSHOT-bin/bin/hive
 	fi
 }
 
